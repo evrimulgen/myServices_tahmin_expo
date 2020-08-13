@@ -1,0 +1,19 @@
+only sellers need to be logged in and give informations
+
+ilk page'de login olmayacak
+
+Sehir secimi(otomatik lokasyon bul) > aradigi servis secimi > (near to far) servisi sectikten sonra numarasi cikacak
+
+bir buton olacak buyer ile seller arasi degisebilecek
+
+we need a database
+
+if one want to offer service he need to give phone number, email is optional
+
+ask for the location after you click the blumber, and the button will send post request to the server and the server will send all the plumbers in 50 km or more
+    - all the names in the city
+
+
+expo start --web
+
+google api key: AIzaSyAzjpQAbCDWukrFmf-tZICJs-kZTxIwFeI

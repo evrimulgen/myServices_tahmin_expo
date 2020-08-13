@@ -1,0 +1,14 @@
+.panel-container {
+    margin-bottom:30px;
+}
+
+.auth-container {
+    text-align: center;
+    align-self:top;
+}
+
+.auth {
+    vertical-align:middle;
+    display:inline-block;
+    padding-left: 10px;
+}

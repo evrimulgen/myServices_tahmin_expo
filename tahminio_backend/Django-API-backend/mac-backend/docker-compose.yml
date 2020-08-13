@@ -1,0 +1,39 @@
+version: "2"
+services:
+
+  web_app:
+    build:
+      context: .
+    image: web_app
+    environment:
+      - DJANGO_SETTINGS_MODULE=mac.settings.dev
+    command: tail -f /var/log/dmesg    # Added not to kill container so that it can be bashed.
+    volumes:
+      - ".:/app"
+    links:
+      - postgres
+    ports:
+      - "8080:8080"
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_DB=mac_db
+      - POSTGRES_USER=mac_dbu
+      - POSTGRES_PASSWORD=test
+    container_name: mac_postgres
+    volumes:
+      - ".data/db:/var/lib/postgresql/data"
+
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=mypass
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  redis:
+    image: redis:latest

@@ -1,0 +1,14 @@
+django==2.1
+psycopg2==2.8.5
+Pillow==7.2.0
+djangorestframework==3.8.2
+django-cors-headers==2.2.0
+django-extra-fields==1.0.0
+django-storages==1.6.6
+boto3==1.7.4
+Celery==4.1.0
+requests==2.18.4
+the_big_username_blacklist==1.5.2
+coverage==4.5.1
+django-redis==4.9.0
+leaderboard==3.7.3

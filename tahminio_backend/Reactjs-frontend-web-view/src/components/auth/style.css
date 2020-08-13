@@ -1,0 +1,50 @@
+.login-form, .signup-form {
+border-radius: 3px;
+border: 0px solid #000000;
+background-color: white;
+text-align: center;
+max-width: 200px;
+width: 100%;
+padding: 30px;
+transform-origin: top left;
+}
+
+.login-form input, .signup-form input {
+border: 1px solid #c5c8c6;
+padding: 10px;
+background-color: #e8e9e9;
+box-sizing: border-box;
+width: 100%;
+-webkit-box-shadow: inset 10px 10px 16px -15px rgba(163,161,163,1);
+-moz-box-shadow: inset 10px 10px 16px -15px rgba(163,161,163,1);
+box-shadow: inset 10px 10px 16px -15px rgba(163,161,163,1);
+}
+
+.login-form .login-field input, .signup-form .signup-field input {
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+border-bottom: 0px;
+}
+
+.login-form .login-field-2 input, .signup-form .signup-field-5 input {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.login-form .login-field-3 input, .signup-form .signup-field-6 input{
+border-radius: 5px;
+margin-top: 10px;
+background: linear-gradient(to bottom, #4a9aa2, #398088, #398088, #317279);
+width:100%;
+padding: 10px;
+color: white;
+border: 0px;
+
+}
+
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color:#929593;
+    opacity: 1;
+    font-size: 10px;
+}
