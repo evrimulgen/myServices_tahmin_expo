@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import axios from 'axios';
+var qs = require('qs');
 const Actions = 'react-native-router-flux';
 import { 
   USERNAME_CHANGED,
@@ -25,7 +26,7 @@ import {
   GET_USER_FEED,
   REQUEST_PASSWORD_RESET,
 } from './types';
-const allowed_host = "http://localhost:8000"
+const allowed_host = "http://127.0.0.1:8000"
 
 export const usernameChanged = (text) => {
   return {
@@ -109,16 +110,27 @@ export const userSignUp = ({ username, password, email, first_name, last_name, b
 export const userLogin = ({ username, password }) => {
   return (dispatch) => {
     dispatch({ type: USER_LOGIN });
+    var data = qs.stringify({
+      'username': username,
+      'password': password 
+    });
+    var config = {
+      method: 'post',
+      url: `${allowed_host}/api-token-auth/`,
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded', 
+        //'Cookie': 'csrftoken=BDIDqqKPsbFcSVubR2oJhBj00gK0Fc30Mj6yVVxU5OlrvzQzsI6AxYiahVumGYPK'
+      },
+      data : data
+    };
 
-    axios.post(`${allowed_host}/v1/users/login/`, {
-      username: username,
-      password: password
+    axios(config)
+    .then(function (user) {
+      //console.log(JSON.stringify(response.data), "turkie");
+      LoginUserSuccess(dispatch, user)
     })
-      .then(user => {
-        LoginUserSuccess(dispatch, user);
-      })
-      .catch(() => LoginUserFail(dispatch));
-  };
+    .catch(() => LoginUserFail(dispatch));
+  }
 };
 
 const LoginUserFail = (dispatch) => {
