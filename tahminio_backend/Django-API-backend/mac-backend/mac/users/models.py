@@ -25,16 +25,16 @@ class User(AbstractUser):
         super(User, self).save(*args, **kwargs)
         if created:
             Token.objects.create(user=self)
-            if not self.verified:
-                verification_created = False
-                while not verification_created:
-                    try:
-                        key = create_verification_key()
-                        EmailVerification.objects.create(user=self, key=key)
-                        verification_created = True
-                        send_verification_email.delay(key, self.email)
-                    except:
-                        pass
+            # if not self.verified:
+            #     verification_created = False
+            #     while not verification_created:
+            #         try:
+            #             key = create_verification_key()
+            #             EmailVerification.objects.create(user=self, key=key)
+            #             verification_created = True
+            #             send_verification_email.delay(key, self.email)
+            #         except:
+            #             pass
 
 
 class Followship(models.Model):

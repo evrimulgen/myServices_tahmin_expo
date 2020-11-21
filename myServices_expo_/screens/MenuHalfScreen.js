@@ -1,23 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux' 
+import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
+import { 
+  userGetMe,
+  logoutUser,
+  userDeleteMe,
+  onCityChanged,
+  onMenuStateChanged,
+} from '../redux/actions';
 import axios from "axios";
 
 const uri = 'https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png';
 
-export default function Menu({ onItemSelected }) {
+class Menu extends Component {
+  constructor(props) {
+      super(props);
+      this.state = {
+         items: [],
+         error: null,
+         city: "unknown"
+      }
+    }
 
-  const navigate = useSelector(state => state.navigateReducer.navigate)
-  const city = useSelector(state => state.navigateReducer.city)
-  const dispatch = useDispatch()  
-  const CITY_CHANGE = 'CITY_CHANGE'
-    
-  const myLoc = () => {
-    // Promise.resolve()
+  // console.log(onItemSelected)
+  // isOpen = useSelector(state => state.navigateReducer.isOpen)
+  // city = useSelector(state => state.navigateReducer.city)
+  // dispatch = useDispatch()  
+  // CITY_CHANGE = 'CITY_CHANGE'
+  
+  sideBar(foo) {
+    var promise1 = new Promise((resolve, reject) => {
+      resolve(this.props.onMenuStateChanged(!this.props.menu_state))
+      console.log("worked")
+    });
+    promise1.then( () => {
+      console.log("worked2")
+      foo()
+    })
+  }
+
+  myLoc() {
     navigator.geolocation.getCurrentPosition(
       (position) => 
-      convertCoords(
+      this.convertCoords(
         position.coords.latitude,
         position.coords.longitude
       ),
@@ -27,7 +54,7 @@ export default function Menu({ onItemSelected }) {
     )
   }
 
-  const convertCoords = (latitude, longitude) => {
+  convertCoords(latitude, longitude) {
     // latitude = 31.188502; longitude = 16.584834 // Sirte
     // Access to fetch at 'https://maps.googleapis.com/maps/api/geocode/jsonlatlng=29.917184,-90.03008&key=AIzaSyAO7VpyFushhr6-s6Jt1O5ozkDRxq8QAUk' 
     // from origin 'http://localhost:19006' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. 
@@ -45,68 +72,53 @@ export default function Menu({ onItemSelected }) {
       for (let i = 0; i < address.length; i++) {
         if (i>=1) text = text + " " + address[i]
       }
-      dispatch({ 
-          type: CITY_CHANGE, 
-          payload: text
-      })
+      this.props.onCityChanged(text);
+      // dispatch({ 
+      //     type: CITY_CHANGE, 
+      //     payload: text
+      // })
     }, (err) => {
       console.log("error happened; you need to catch it...", err);
     });
   };
 
-  // setTimeout(
-  //   () => {
-  //     const navigate = useSelector(state => state.navigate)
-  //   }, 300
-  // )
-  return (
-    <ScrollView scrollsToTop={false} style={styles.menu}>
-      <View style={styles.avatarContainer}>
-        <Image
-          style={styles.avatar}
-          source={{ uri }}
-        />
-        <Text style={styles.name}>Your name</Text>
-        <Button
-          title="Home"
-          onPress={() => navigate.navigate('Home')}
-        />
-        <Button
-          title="Services"
-          onPress={() => navigate.navigate('Services')}
-        />
-        <Button
-          title="Notifications"
-          onPress={() => navigate.navigate('Links')}
-        />
-        <Button
-          title="Profile"
-          onPress={() => navigate.navigate('Login')}
-        />
-        <Button
-          title="Settings"
-          onPress={() => navigate.navigate('Settings')}
-        />
-      </View>
-      <TouchableOpacity onPress={() => myLoc() }>
-        <Text>city:{city}</Text>
-      </TouchableOpacity>
-
-      <Text
-        onPress={() => console.log('About')} // onItemSelected("About")
-        style={styles.item}
-      >
-        About
-      </Text>
-
-      <Text
-        onPress={() => console.log('Contacts')} // onItemSelected("About")
-        style={styles.item}
-      >
-        Contacts
-      </Text>
-    </ScrollView>
-  );
+  render() {
+    return (
+      <ScrollView scrollsToTop={false} style={styles.menu}>
+        <View style={styles.avatarContainer}>
+          <Image
+            style={styles.avatar}
+            source={{ uri }}
+          />
+          <Text style={styles.name}>{this.props.username}</Text>
+          <Button
+            title="Home"
+            onPress={() => this.sideBar(Actions.Home)}
+          />
+          <Button
+            title="Services"
+            onPress={() => this.sideBar(Actions.Services)}
+          />
+          <Button
+            title="Notifications"
+            onPress={() => this.sideBar(Actions.Links)}
+          />
+          <Button
+            title="Profile"
+            onPress={() => this.sideBar(Actions.Login) }
+          />
+          <Button
+            title="Settings"
+            onPress={() => this.sideBar(Actions.UserPage)}
+          />
+        </View>
+        <TouchableOpacity onPress={() => this.myLoc() }>
+          <Text>city:{this.props.city}</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    );
+  }
+  
 }
 
 Menu.propTypes = {
@@ -141,4 +153,21 @@ const styles = StyleSheet.create({
       fontWeight: '300',
       paddingTop: 5,
     },
-})
+});
+
+const mapStateTopProps = state => {
+  console.log(state)
+  return {
+    user: state.UserReducer.user,
+    username: state.UserReducer.username,
+    token: state.UserReducer.token,
+    loading: state.UserReducer.loading,
+    error: state.UserReducer.error,
+    city: state.CityReducer.city,
+    menu_state: state.CityReducer.menu_state,
+  };
+};
+
+export default connect(mapStateTopProps, { 
+  userGetMe, logoutUser, userDeleteMe, onCityChanged, onMenuStateChanged
+})(Menu);

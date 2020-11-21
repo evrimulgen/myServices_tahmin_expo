@@ -2,6 +2,8 @@ export const IS_LOADING = 'is_loading';
 export const USERNAME_CHANGED = 'username_changed';
 export const EMAIL_CHANGED = 'email_changed';
 export const PASSWORD_CHANGED = 'password_changed';
+export const PASSWORD_SECOND_CHANGED = 'password_second_changed';
+export const LOGIN_PASSWORDMATCH_FAIL = "password_match_error";
 export const FIRST_NAME_CHANGED = 'first_name_changed';
 export const LAST_NAME_CHANGED = 'last_name_changed';
 export const BIO_CHANGED = 'bio_changed';
@@ -9,7 +11,6 @@ export const PROFILE_PHOTO_CHANGED = 'profile_photo_changed';
 
 export const LOGIN_USER_SUCCESS = 'login_user_success';
 export const LOGIN_USER_FAIL = 'login_user_fail';
-export const PAGE_CHANGED = 'page_changed';
 export const LOGOUT_USER = 'logout_user';
 
 export const MATCH_FETCH = 'match_fetch';
@@ -63,3 +64,10 @@ export const GET_A_MATCH = 'get_a_match';
 export const GET_AVAILABLE_GAMES = 'get_available_games';
 export const GET_MATCHLIST_META = 'get_matchlist_meta';
 export const ERROR_ACCURED = 'error_accured';
+
+// CityActions
+export const CITY_CHANGE = "city_change";
+export const MENU_STATE = "menu_state";
+
+// PageActions
+export const PAGE_CHANGED = "page_changed";

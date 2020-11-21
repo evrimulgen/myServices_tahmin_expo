@@ -5,6 +5,6 @@ import {
 export const pageChanged = (value) => {
   return {
     type: PAGE_CHANGED,
-    payload: value.page
+    payload: value
   };
 };

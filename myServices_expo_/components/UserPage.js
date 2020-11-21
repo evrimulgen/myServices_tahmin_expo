@@ -5,31 +5,16 @@ import {
 	userGetMe,
 	logoutUser,
 	userDeleteMe,
-	userVerify,
-  getUserTrophies,
-} from '../actions';
-import { CardSection, Base } from './common';
-import { Actions } from 'react-native-router-flux';
-import Login from './Login';
-import { Button } from 'native-base';
+} from '../redux/actions';
+
+const Actions = 'react-native-router-flux';
+import { Input } from 'react-native-elements';
+import { Button } from 'react-native-elements';
+
+const HEIGHT = Dimensions.get('window').height;
 
 class UserPage extends Component {
 	state = { count: 0 }
-	
-/*	componentDidMount() {
-		if (this.state.count === 0) {
-			console.log("updating info now")
-		  const { token } = this.props;
-		  this.props.userGetMe({ token });
-		  this.setState({ count: this.state.count + 1 });
-		}
-	}*/
-
-/*	renderButton() {
-    if (this.props.loading) {
-      return <Spinner size="large" />;
-    }
-  }*/
 
 	onLogoutUser() {
 	  const { token } = this.props;
@@ -42,18 +27,6 @@ class UserPage extends Component {
   	// demand the owner's password
   	const { token } = this.props;
 		this.props.userDeleteMe({ token });
-  }
-
-  onUserVerify() {
-  	// TODO
-  	// find out where to take verify key
-  	const { verification_key } = 1234
-  	this.props.userVerify({ verification_key })
-  }
-
-  onGetUserTrophies() {
-    const { token } = this.props;
-    this.props.getUserTrophies({ token });
   }
 
   renderForgot() {
@@ -71,7 +44,6 @@ class UserPage extends Component {
 	  if (user === null) {
 			return (
 		    <View>
-          <Login />
 		        <TouchableOpacity onPress={() => Actions.ForgotInfo()}>
 
             {this.renderForgot()}
@@ -100,53 +72,54 @@ class UserPage extends Component {
 	  return (
       <ScrollView>
 
-        <View style={{ flexDirection: 'row', margin: 25, alignItems: 'center',}}>
-          <Image 
-            source={{ uri: 
-                user.profile_photo !== null
-                ? user.profile_photo
-                : 'https://upload.wikimedia.org/wikipedia/commons/9/97/Anonim.png'
-            }}
-            style={styles.profilePhoto}
-          />
-          <View style={{ flex: 2, marginLeft: 75, }}>
+        <View style={{ flex: 1, flexDirection: 'column', margin: 25, alignItems: 'center',}}>
+          <View>
+            <Image 
+              source={{ uri: 
+                  user.profile_photo !== null
+                  ? user.profile_photo
+                  : 'https://upload.wikimedia.org/wikipedia/commons/9/97/Anonim.png'
+              }}
+              style={styles.profilePhoto}
+            />
+          </View>
+          <View>
             <Text>{user.first_name}</Text>
+          </View>
+          <View>
             <Text>{user.email}</Text>
+          </View>
+          <View>
             <Text>{user.last_name}</Text>
+          </View>
+          <View>
             <Text>{user.username}</Text>
+          </View>
+          <View>
             <Text>{user.bio}</Text>
+          </View>
+          <View>
+            <Text>{user.token}</Text>
           </View>
         </View>
 
-        <CardSection>
-          <Button block style={{ flex: 1 }} onPress={() => Actions.UpdateMe()}>
-            <Text>Update Me</Text>
-          </Button>
-        </CardSection>
-        <CardSection>
-          <Button block style={{ flex: 1 }} onPress={this.onLogoutUser.bind(this)}>
-            <Text>Logout</Text>
-          </Button>
-        </CardSection>
-        <CardSection>
-          <Button block style={{ flex: 1 }} onPress={this.onUserDeleteMe.bind(this)}>
-            <Text>Delete yourself</Text>
-          </Button>
-        </CardSection>
-        <CardSection>
-          <Button block style={{ flex: 1 }} onPress={this.onGetUserTrophies.bind(this)}>
-            <Text>GetUserTrophies</Text>
-          </Button>
-        </CardSection>
+        <Button 
+          type="outline" 
+          onPress={() => Actions.UpdateMe()}
+          title="Update Me"
+        />
 
-        <CardSection>
-        	{ !user.is_verified
-            ? <Button block style={{ flex: 1 }} onPress={this.onUserVerify.bind(this)}>
-                <Text>Verify your account</Text>
-              </Button>
-        		: null
-        	}
-        </CardSection>
+        <Button 
+          type="outline" 
+          onPress={this.onLogoutUser.bind(this)}
+          title="Log Out"
+        />
+
+        <Button 
+          type="outline" 
+          onPress={this.onUserDeleteMe.bind(this)}
+          title="Delete Yourself"
+        />
 
       </ScrollView>
     );
@@ -154,9 +127,9 @@ class UserPage extends Component {
 
 	render() {
 		return (
-			<Base>
+      <View style={{height: HEIGHT}}>
 				{this.renderPage()}
-			</Base>
+      </View>
 		);
 	}
 };
@@ -169,8 +142,8 @@ const styles = {
     color: 'red'
   },
   profilePhoto: {
-    height: width/5,
-    width: width/5,
+    height: width / 5,
+    width: width / 5,
     borderRadius: 64,
     borderWidth: 1,
     borderColor: 'black',
@@ -179,14 +152,22 @@ const styles = {
 
 const mapStateTopProps = state => {
   return {
-    user: state.user.user,
-    token: state.user.token,
-    loading: state.user.loading,
-    error: state.user.error,
+    user: state.UserReducer.user,
+    token: state.UserReducer.token,
+    loading: state.UserReducer.loading,
+    error: state.UserReducer.error,
   };
 };
 
 export default connect(mapStateTopProps, { 
-  userGetMe, logoutUser, userDeleteMe, userVerify, getUserTrophies,
+  userGetMe, logoutUser, userDeleteMe, 
 })(UserPage);
 
+
+       
+        	// { !user.is_verified
+         //    ? <Button block style={{ flex: 1 }} onPress={this.onUserVerify.bind(this)}>
+         //        <Text>Verify your account</Text>
+         //      </Button>
+        	// 	: null
+        	// }

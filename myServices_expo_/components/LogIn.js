@@ -1,16 +1,19 @@
-import { View, Text, KeyboardAvoidingView, Animated, Button, TouchableOpacity } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Animated, Button, TouchableOpacity, Dimensions } from 'react-native';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { useSelector, useDispatch } from 'react-redux' 
 import { 
   usernameChanged,
   passwordChanged,
   userLogin,
   logoutUser,
+  pageChanged,
 } from '../redux/actions';
 import { Card, CardSection, Input, Spinner } from './common';
 import styled from 'styled-components/native';
-//import { Button } from 'native-base';
+import SignUp from './SignUp';
+import { Actions } from 'react-native-router-flux';
+
+const HEIGHT = Dimensions.get('window').height;
 
 var _animate =  new Animated.Value(10) 
 
@@ -65,8 +68,8 @@ class Login extends Component {
     }
     return (
 
-      <View>
-        <Animated.View style={styles.myStyle} />
+      <View style={{ height: HEIGHT}}>
+        {/* <Animated.View style={styles.myStyle} /> */}
 
         {/* <Button block style={{ marginLeft: 40, marginRight: 40, marginTop: 10, flex: 1 }} onPress={() => this.startAnimationAQ()}>
           <Text> click me </Text>
@@ -84,7 +87,7 @@ class Login extends Component {
 
           <TouchableOpacity 
             style={styles.appButtonContainer} 
-            onPress={() => console.log(this.props.navigate.navigate("SignUp"))}>
+            onPress={() => Actions.SignUp()}>
             <Text style={styles.appButtonText}>Sign Up</Text>
           </TouchableOpacity>
       </View>
@@ -157,16 +160,17 @@ const styles = {
 };
 
 const mapStateToProps = state => {
+  console.log(state)
   return {
     username: state.UserReducer.username,
     password: state.UserReducer.password,
     error: state.UserReducer.error,
     loading: state.UserReducer.loading,
     user: state.UserReducer.user,
-    navigate: state.navigateReducer.navigate,
+    page: state.PageReducer.pageName,
   };
 };
 
 export default connect(mapStateToProps, { 
-  usernameChanged, passwordChanged, userLogin, logoutUser, 
+  usernameChanged, passwordChanged, userLogin, logoutUser, pageChanged,
 })(Login);

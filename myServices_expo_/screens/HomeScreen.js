@@ -5,6 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 //import { Input } from '../components/common/Input';
 import { MonoText } from '../components/StyledText';
 import { Provider, useSelector, useDispatch } from 'react-redux' 
+import { Actions } from 'react-native-router-flux';
 
 export default function HomeScreen({ navigation }) {
   //         onPress={() => navigation.navigate('Details')}
@@ -17,8 +18,6 @@ export default function HomeScreen({ navigation }) {
   const city = useSelector(state => state.city)
   const dispatch = useDispatch()
 
-  
-  const countUp = { type: 'COUNT_UP' }
   const PAGE_CHANGE = 'PAGE_CHANGE'
   dispatch({ 
     type: PAGE_CHANGE, 
@@ -28,41 +27,8 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Text>{count}</Text>
-          <Text>{city}</Text>
-          <Button onPress={() => dispatch(countUp)}>count up</Button>
-          {/* <Input 
-            style={styles.inputStyle}
-            label="Username"
-            placeholder="username123"
-            onChangeText={console.log("change")}//this.onUsernameChange.bind(this)}
-            //value={this.props.username}
-            returnKeyType="next"
-            autoCorrect={false}
-            autoCapitalize="none"
-          /> */}
-        </View>
+       <Text>MAIN PAGE</Text>
 
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>1lOpen up the code for this screen:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change any of the text, save the file, and your app will automatically reload.
-          </Text>
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
 
       <View style={styles.tabBarInfoContainer}>
@@ -79,39 +45,6 @@ export default function HomeScreen({ navigation }) {
 HomeScreen.navigationOptions = {
   header: null,
 };
-
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use useful development
-        tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/workflow/development-mode/');
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/get-started/create-a-new-app/#making-your-first-change'
-  );
-}
 
 const styles = StyleSheet.create({
   container: {

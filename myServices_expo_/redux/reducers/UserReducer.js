@@ -10,6 +10,7 @@ import {
   LOGIN_USER_FAIL, 
   USER_LOGIN,
   LOGOUT_USER,
+  PASSWORD_SECOND_CHANGED,
   USER_SIGN_UP,
   USER_UPDATE_ME,
   USER_GET_ME,
@@ -22,13 +23,15 @@ import {
   GET_USER_TROPHIES,
   GET_USER_FEED,
   REQUEST_PASSWORD_RESET,
+  LOGIN_PASSWORDMATCH_FAIL,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   token: null,
-  username: '',
+  username: undefined,
   email: '', 
   password: '',
+  password_second: '',
   first_name: '',
   last_name: '',
   bio: '',
@@ -49,6 +52,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, email: action.payload };
     case PASSWORD_CHANGED:
       return { ...state, password: action.payload };
+    case PASSWORD_SECOND_CHANGED:
+      return { ...state, password_second: action.payload };
+    case LOGIN_PASSWORDMATCH_FAIL:
+      return { ...state, ...INITIAL_STATE, error: 'Passwords do not match.' }; 
     case FIRST_NAME_CHANGED:
       return { ...state, first_name: action.payload };
     case LAST_NAME_CHANGED:
@@ -62,6 +69,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true, error: '' };
     case LOGIN_USER_SUCCESS:
       // After logged in with the help of second argument clears INITIAL_STATE
+      console.log(action.payload)
       return { ...state, ...INITIAL_STATE, user: action.payload.data , token: action.payload.data.token };  
     case LOGIN_USER_FAIL:
       return { ...state, ...INITIAL_STATE, error: 'Authentication Failed.' }; 

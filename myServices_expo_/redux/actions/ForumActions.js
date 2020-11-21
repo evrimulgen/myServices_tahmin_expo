@@ -14,6 +14,10 @@ import {
   GET_PREDICTION,
 } from './types';
 
+
+// database
+// mirkan2.pythonanywhere.com
+
 export const makePrediction = ({ token }, match_id, text, game ) => {
   console.log(token, match_id, text, game)
 	// AUTH_REQ

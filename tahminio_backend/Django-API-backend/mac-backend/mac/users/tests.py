@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 
 from .models import User, Followship, EmailVerification, PasswordReset
-from mac.forum.models import Game, Team, League, Match
+from my_services.forum.models import Game, Team, League, Match
 
 
 class UserTestMixin(object):

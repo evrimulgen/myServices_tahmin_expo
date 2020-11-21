@@ -4,7 +4,8 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import password_validation, authenticate
 from drf_extra_fields.fields import Base64ImageField
 from the_big_username_blacklist import validate as validate_username
-from django.contrib.auth.models import User
+from .models import User
+#from django.contrib.auth.models import User
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -36,12 +37,12 @@ class UserMeSerializer(serializers.ModelSerializer):
             "email",
             "token",
             "password",
-            #"profile_photo",
-            #"bio",
-            #"first_name",
-            #"last_name",
-            #"verified",
-            #"remaining_modifier",
+            "profile_photo",
+            "bio",
+            "first_name",
+            "last_name",
+            "verified",
+            "remaining_modifier",
         ]
         extra_kwargs = {'password': {'write_only': True}, 'remaining_modifier': {'read_only': True}, "verified": {"read_only": True}}
 
@@ -54,14 +55,14 @@ class UserMeSerializer(serializers.ModelSerializer):
             password_validation.validate_password(password)
         except:
             raise ValidationError('Password is not valid')
-
         user = User.objects.create_user(**validated_data)
-        validated_data["token"] = self.get_token(user)
+
         return user
 
     def get_token(self, user):
-        token = Token.objects.create(user=user)
+        token = Token.objects.get(user=user)
         return token.key
+
 
 
 class UserDetailSerializer(serializers.ModelSerializer):

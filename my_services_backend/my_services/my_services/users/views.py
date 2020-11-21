@@ -43,19 +43,15 @@ class UserSignupView(CreateAPIView):
     permission_classes = []
     serializer_class = UserMeSerializer
 
-    def post(self, request, *args, **kwargs):
-        from rest_framework.authtoken.views import obtain_auth_token
-        serializer = self.get_serializer(data=self.request.data)
-        user = request.data
-        import pdb;pdb.set_trace()
-        serializer = serializer.create({
-            'email': user['email'], 
-            'password': user['password'], 
-            'username': user['username']
-            })
-        serializer.is_valid(raise_exception=True)
-        #user = serializer.create(user)
-        return Response(UserMeSerializer(user).data)
+    # def post(self, request, *args, **kwargs):
+    #     from rest_framework.authtoken.views import obtain_auth_token
+    #     serializer = self.get_serializer(data=self.request.data)
+    #     user = request.data
+    #     import pdb;pdb.set_trace()
+    #     serializer = serializer.create({ 'email': user['email'], 'password': user['password'], 'username': user['username'] })
+    #     serializer.is_valid(raise_exception=True)
+    #     #user = serializer.create(user)
+    #     return Response(UserMeSerializer(user).data)
 
 # class UserSignupView(CreateAPIView):
 #     authentication_classes = []

@@ -5,6 +5,7 @@ import MatchReducer from './MatchReducer';
 import SearchReducer from './SearchReducer';
 import LeaderboardReducer from './LeaderboardReducer';
 import ForumReducer from './ForumReducer';
+import CityReducer from './CityReducer';
 
 export default combineReducers({
   user: UserReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   search: SearchReducer,
   leaderboard: LeaderboardReducer,
   forum: ForumReducer,
+  city: CityReducer,
 });

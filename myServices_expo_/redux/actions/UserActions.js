@@ -1,11 +1,13 @@
 import _ from 'lodash';
 import axios from 'axios';
+import { Actions } from 'react-native-router-flux';
 var qs = require('qs');
-const Actions = 'react-native-router-flux';
+
 import { 
   USERNAME_CHANGED,
   EMAIL_CHANGED,
   PASSWORD_CHANGED, 
+  PASSWORD_SECOND_CHANGED, 
   FIRST_NAME_CHANGED,
   LAST_NAME_CHANGED,
   BIO_CHANGED,
@@ -25,6 +27,7 @@ import {
   GET_USER_TROPHIES,
   GET_USER_FEED,
   REQUEST_PASSWORD_RESET,
+  LOGIN_PASSWORDMATCH_FAIL,
 } from './types';
 const allowed_host = "http://127.0.0.1:8000"
 
@@ -38,6 +41,13 @@ export const usernameChanged = (text) => {
 export const emailChanged = (text) => {
   return {
     type: EMAIL_CHANGED,
+    payload: text
+  };
+};
+
+export const password_second_changed = (text) => {
+  return {
+    type: PASSWORD_SECOND_CHANGED,
     payload: text
   };
 };
@@ -86,10 +96,14 @@ export const logoutUser = ({ token }) => {
   };
 };
 
-export const userSignUp = ({ username, password, email, first_name, last_name, bio }) => {
+export const userSignUp = ({ username, password, password_second, email, first_name, last_name, bio }) => {
   // Description: Creates a new user with given data
   // Endpoint `POST /v1/users/signup/`
   return (dispatch) => {
+    if (password_second != password) {
+      return dispatch({ type: LOGIN_PASSWORDMATCH_FAIL });
+    }
+
     dispatch({ type: USER_SIGN_UP });
 
     axios.post(`${allowed_host}/v1/users/signup/`, {
@@ -103,7 +117,10 @@ export const userSignUp = ({ username, password, email, first_name, last_name, b
       .then(user => {
         LoginUserSuccess(dispatch, user);
       })
-      .catch(() => LoginUserFail(dispatch));
+      .catch(e => {
+        console.log(e);
+        LoginUserFail(dispatch)
+      });
   };
 };
 
@@ -116,7 +133,7 @@ export const userLogin = ({ username, password }) => {
     });
     var config = {
       method: 'post',
-      url: `${allowed_host}/api-token-auth/`,
+      url: `${allowed_host}/v1/users/login/`,
       headers: { 
         'Content-Type': 'application/x-www-form-urlencoded', 
         //'Cookie': 'csrftoken=BDIDqqKPsbFcSVubR2oJhBj00gK0Fc30Mj6yVVxU5OlrvzQzsI6AxYiahVumGYPK'
@@ -127,7 +144,7 @@ export const userLogin = ({ username, password }) => {
     axios(config)
     .then(function (user) {
       //console.log(JSON.stringify(response.data), "turkie");
-      LoginUserSuccess(dispatch, user)
+      LoginUserSuccess(dispatch, user);
     })
     .catch(() => LoginUserFail(dispatch));
   }
@@ -139,6 +156,7 @@ const LoginUserFail = (dispatch) => {
 
 const LoginUserSuccess = (dispatch, user) => {
   // TODO sometimes gives unexpected login error
+  console.log(user)
   dispatch({
     type: LOGIN_USER_SUCCESS,
     payload: user
@@ -161,6 +179,7 @@ export const userGetMe = ({ token }) => {
       }
     })
       .then(user => {
+        console.log(user)
         LoginUserSuccess(dispatch, user);
       })
       .catch((err) => console.log(err))
